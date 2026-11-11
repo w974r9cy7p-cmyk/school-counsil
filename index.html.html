@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="el" class="h-full bg-[#f6f2ec] text-slate-800 antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Εκπαιδευτική Αναγέννηση | Μαθητικό Συμβούλιο</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: {
+                            50: '#FAF7F2',
+                            100: '#F1E9DC',
+                            200: '#E4D5C1',
+                            300: '#D4C5B0',
+                            400: '#C2B097',
+                            500: '#A8947A',
+                            600: '#8A765E',
+                            900: '#2C251E',
+                        },
+                        sky: {
+                            50: '#F0F7FA',
+                            100: '#E0EFF5',
+                            200: '#B9DFED',
+                            300: '#7CC4DE',
+                            400: '#38A7CF',
+                            500: '#0EA5E9',
+                            600: '#0284C7',
+                            700: '#0369A1',
+                            900: '#0C4A6E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f6f2ec;
+            color: #1e293b;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .beige-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 197, 176, 0.5);
+            box-shadow: 0 4px 24px -2px rgba(138, 118, 94, 0.07);
+        }
+        .beige-card-hover:hover {
+            border-color: rgba(14, 165, 233, 0.4);
+            box-shadow: 0 12px 32px -4px rgba(2, 132, 199, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1E9DC;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #C2B097;
+            border-radius: 999px;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-sky-200 selection:text-sky-900 custom-scrollbar">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-[#f6f2ec]/90 backdrop-blur-md border-b border-beige-300/60 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- School Crest / Brand -->
+            <div class="flex items-center space-x-3.5 cursor-pointer" onclick="switchTab('feed')">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center text-white shadow-md shadow-sky-600/20 font-serif font-bold text-lg">
+                    ΕΑ
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-slate-900 text-base sm:text-lg leading-tight">
+                        Εκπαιδευτική Αναγέννηση
+                    </h1>
+                    <p class="text-[11px] font-semibold tracking-wider uppercase text-sky-700">Μαθητικό Συμβούλιο</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-1 bg-beige-100/80 p-1.5 rounded-2xl border border-beige-300/70">
+                <button onclick="switchTab('feed')" id="nav-feed" class="nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-700 hover:text-sky-700 flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-sky-600"></i> Δείτε Ιδέες & Δράσεις
+                </button>
+                <button onclick="switchTab('suggest')" id="nav-suggest" class="nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-sky-700 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-amber-600"></i> Προτείνετε Ιδέα
+                </button>
+                <button onclick="switchTab('outsource')" id="nav-outsource" class="nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-sky-700 flex items-center gap-2">
+                    <i class="fa-solid fa-globe text-emerald-600"></i> Εκτός Σχολείου Δράσεις
+                </button>
+                <button onclick="switchTab('projects')" id="nav-projects" class="nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-sky-700 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-violet-600"></i> Τα Έργα Μας
+                </button>
+            </nav>
+
+            <!-- Quick Action Button -->
+            <div class="hidden sm:flex items-center gap-3">
+                <button onclick="switchTab('suggest')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-sky-600/20 transition-all flex items-center gap-2 transform active:scale-95">
+                    <i class="fa-solid fa-plus"></i> Νέα Πρόταση
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#f6f2ec]/95 backdrop-blur-lg border-t border-beige-300 px-2 py-2 flex justify-around items-center shadow-lg">
+        <button onclick="switchTab('feed')" id="mob-feed" class="mob-btn flex flex-col items-center py-1 px-2 text-sky-600 font-bold">
+            <i class="fa-solid fa-compass text-lg"></i>
+            <span class="text-[10px] mt-1">Δράσεις</span>
+        </button>
+        <button onclick="switchTab('suggest')" id="mob-suggest" class="mob-btn flex flex-col items-center py-1 px-2 text-slate-600 hover:text-sky-600">
+            <i class="fa-solid fa-pen-nib text-lg"></i>
+            <span class="text-[10px] mt-1">Πρόταση</span>
+        </button>
+        <button onclick="switchTab('outsource')" id="mob-outsource" class="mob-btn flex flex-col items-center py-1 px-2 text-slate-600 hover:text-sky-600">
+            <i class="fa-solid fa-globe text-lg"></i>
+            <span class="text-[10px] mt-1">Εκτός Σχολείου</span>
+        </button>
+        <button onclick="switchTab('projects')" id="mob-projects" class="mob-btn flex flex-col items-center py-1 px-2 text-slate-600 hover:text-sky-600">
+            <i class="fa-solid fa-trophy text-lg"></i>
+            <span class="text-[10px] mt-1">Έργα Μας</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-20 md:mb-8">
+
+        <!-- ================= 1) ΔΕΙΤΕ ΙΔΕΕΣ & ΔΡΑΣΕΙΣ ================= -->
+        <section id="tab-feed" class="tab-content active space-y-6">
+            <!-- Banner Header -->
+            <div class="beige-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="max-w-2xl relative z-10">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800 bg-sky-100 px-3 py-1 rounded-full border border-sky-200">Ζωντανός Μαθητικός Φόρουμ</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mt-3">Προτάσεις & Ιδέες Μαθητών</h2>
+                    <p class="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
+                        Δείτε τις ιδέες που υποβάλλουν οι συμμαθητές σας, κάντε like, σχολιάστε και συμμετάσχετε στη διαμόρφωση της σχολικής μας ζωής.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Controls: Search & Filter -->
+            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-beige-100/80 p-3.5 rounded-2xl border border-beige-300/80">
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="renderFeed()" placeholder="Αναζήτηση με όνομα μαθητή, τίτλο ή λέξη-κλειδί..." class="w-full bg-white border border-beige-300 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors">
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="sortSelect" onchange="renderFeed()" class="bg-white border border-beige-300 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-sky-500 font-semibold">
+                        <option value="newest">Πρόσφατες Υποβολές</option>
+                        <option value="popular">Περισσότερα Likes</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Posts Grid Container -->
+            <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamically generated posts -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyFeed" class="hidden text-center py-16 bg-white/70 border border-beige-300 rounded-3xl">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-sky-50 flex items-center justify-center text-sky-600 text-2xl">
+                    <i class="fa-regular fa-lightbulb"></i>
+                </div>
+                <h3 class="font-serif text-lg font-bold text-slate-800">Δεν υπάρχουν ακόμα δημοσιευμένες ιδέες</h3>
+                <p class="text-sm text-slate-500 mt-1 max-w-md mx-auto">Γίνετε ο πρώτος μαθητής της Εκπαιδευτικής Αναγέννησης που θα υποβάλει μια πρόταση στο Μαθητικό Συμβούλιο!</p>
+                <button onclick="switchTab('suggest')" class="mt-5 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-sky-600/20">
+                    Υποβολή Πρώτης Ιδέας
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 2) ΠΡΟΤΕΙΝΕΤΕ ΙΔΕΑ ================= -->
+        <section id="tab-suggest" class="tab-content space-y-6">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">Επίσημη Φόρμα Πρότασης</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mt-3">Προτείνετε μια Δράση</h2>
+                    <p class="text-slate-600 text-sm mt-1">Συμπληρώστε τα στοιχεία σας και την ιδέα σας για να δημοσιευτεί στο συμβούλιο.</p>
+                </div>
+
+                <div class="beige-card rounded-3xl p-6 sm:p-8">
+                    <form id="suggestForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Όνομα *</label>
+                                <input type="text" id="firstName" required placeholder="π.χ. Γιώργος" class="w-full bg-white border border-beige-300 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Επώνυμο *</label>
+                                <input type="text" id="lastName" required placeholder="π.χ. Παπαδόπουλος" class="w-full bg-white border border-beige-300 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Τίτλος Δράσης / Ιδέας *</label>
+                                <input type="text" id="activityTitle" required placeholder="π.χ. Τουρνουά Σκακιού" class="w-full bg-white border border-beige-300 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Κατηγορία *</label>
+                                <select id="ideaCategory" class="w-full bg-white border border-beige-300 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-sky-500 transition-colors font-medium">
+                                    <option value="Σχολική Εκδήλωση">🏆 Σχολική Εκδήλωση</option>
+                                    <option value="Βελτίωση Σχολείου">🏫 Βελτίωση Υποδομών</option>
+                                    <option value="Εκπαίδευση & Τεχνολογία">📚 Εκπαίδευση & Τεχνολογία</option>
+                                    <option value="Αθλητισμός & Ψυχαγωγία">⚽ Αθλητισμός & Ψυχαγωγία</option>
+                                    <option value="Εθελοντισμός & Περιβάλλον">🌿 Εθελοντισμός & Περιβάλλον</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Περιγραφή Ιδέας *</label>
+                            <textarea id="ideaDescription" rows="5" required placeholder="Περιγράψτε αναλυτικά την ιδέα σας. Γιατί είναι ωφέλιμη για τους μαθητές; Τι πόροι ή οργάνωση μπορεί να χρειαστούν;" class="w-full bg-white border border-beige-300 rounded-xl p-4 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md shadow-sky-600/20 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Δημοσίευση Ιδέας στο Φόρουμ
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3) ΕΚΤΟΣ ΣΧΟΛΕΙΟΥ ΔΡΑΣΕΙΣ ================= -->
+        <section id="tab-outsource" class="tab-content space-y-6">
+            <!-- Banner Header -->
+            <div class="beige-card rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">Κοινωνική Προσφορά & Δράση</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mt-2">Εκτός Σχολείου Δράσεις</h2>
+                    <p class="text-slate-600 text-sm mt-1 max-w-xl">Εθελοντικές δράσεις, εξωτερικά εργαστήρια, περιβαλλοντικές εξορμήσεις και πολιτιστικά δρώμενα εκτός σχολικού χώρου.</p>
+                </div>
+                <button onclick="toggleModal('outsourceModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-plus-circle"></i> Προσθήκη Δράσης
+                </button>
+            </div>
+
+            <!-- Out of school container -->
+            <div id="outsourceContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Dynamically rendered -->
+            </div>
+
+            <div id="emptyOutsource" class="hidden text-center py-14 bg-white/70 border border-beige-300 rounded-3xl">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-xl">
+                    <i class="fa-solid fa-earth-americas"></i>
+                </div>
+                <h3 class="font-serif text-base font-bold text-slate-800">Δεν υπάρχουν εξωτερικές δράσεις ακόμα</h3>
+                <p class="text-xs text-slate-500 mt-1">Προτείνετε μια εξωτερική εθελοντική ή περιβαλλοντική δράση για τους συμμαθητές σας!</p>
+            </div>
+        </section>
+
+        <!-- ================= 4) ΤΑ ΕΡΓΑ ΜΑΣ ================= -->
+        <section id="tab-projects" class="tab-content space-y-6">
+            <!-- Banner Header -->
+            <div class="beige-card rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-violet-800 bg-violet-100 px-3 py-1 rounded-full border border-violet-200">Απολογισμός Συμβουλίου</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mt-2">Τα Ολοκληρωμένα Έργα Μας</h2>
+                    <p class="text-slate-600 text-sm mt-1 max-w-xl">Πρωτοβουλίες και έργα που ολοκληρώθηκαν με επιτυχία από το Μαθητικό Συμβούλιο της Εκπαιδευτικής Αναγέννησης.</p>
+                </div>
+                <button onclick="toggleModal('projectModal')" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-violet-600/20 transition-all flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-folder-plus"></i> Καταγραφή Έργου
+                </button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projectsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamically rendered -->
+            </div>
+
+            <div id="emptyProjects" class="hidden text-center py-14 bg-white/70 border border-beige-300 rounded-3xl">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-violet-50 flex items-center justify-center text-violet-600 text-xl">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h3 class="font-serif text-base font-bold text-slate-800">Δεν έχουν καταγραφεί ολοκληρωμένα έργα</h3>
+                <p class="text-xs text-slate-500 mt-1">Καταγράψτε τα επιτεύγματα και τις επιτυχίες του συμβουλίου!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal 1: Submit Out-of-School Opportunity -->
+    <div id="outsourceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm hidden p-4">
+        <div class="bg-white border border-beige-300 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-beige-200">
+                <h3 class="font-serif font-bold text-slate-900 text-lg">Προσθήκη Εξωτερικής Δράσης</h3>
+                <button onclick="toggleModal('outsourceModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleOutsourceSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Τίτλος Δράσης *</label>
+                    <input type="text" id="outTitle" required placeholder="π.χ. Καθαρισμός Ακτής Σαρωνικού" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Κατηγορία / Tag *</label>
+                    <input type="text" id="outTag" required placeholder="π.χ. Περιβάλλον, Εθελοντισμός" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Περιγραφή Δράσης *</label>
+                    <textarea id="outDesc" rows="3" required placeholder="Λεπτομέρειες, ημερομηνία και τοποθεσία..." class="w-full bg-beige-50 border border-beige-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Κείμενο Κουμπιού</label>
+                    <input type="text" id="outBtnText" placeholder="π.χ. Δηλώστε Συμμετοχή" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-emerald-500">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-all">
+                    Δημοσίευση Δράσης
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Log Council Project -->
+    <div id="projectModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm hidden p-4">
+        <div class="bg-white border border-beige-300 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-beige-200">
+                <h3 class="font-serif font-bold text-slate-900 text-lg">Καταγραφή Ολοκληρωμένου Έργου</h3>
+                <button onclick="toggleModal('projectModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleProjectSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Όνομα Έργου *</label>
+                    <input type="text" id="projTitle" required placeholder="π.χ. Τοποθέτηση Ηλιακών Παγκακίων" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Περίοδος / Ημερομηνία *</label>
+                    <input type="text" id="projTerm" required placeholder="π.χ. Χειμώνας 2026" class="w-full bg-beige-50 border border-beige-300 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Περιγραφή Αποτελέσματος *</label>
+                    <textarea id="projDesc" rows="3" required placeholder="Σύνοψη του τι πέτυχε το μαθητικό συμβούλιο..." class="w-full bg-beige-50 border border-beige-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-violet-500 resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm shadow-md transition-all">
+                    Αποθήκευση στα Επιτεύγματα
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-20 md:bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white shadow-2xl rounded-2xl px-5 py-3.5 flex items-center gap-3 text-sm">
+            <div class="w-7 h-7 rounded-xl bg-sky-500/30 text-sky-400 flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span id="toastMessage">Η ενέργεια ολοκληρώθηκε!</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-beige-300 bg-white/50 py-6 text-center text-xs text-slate-500">
+        <p>&copy; 2026 Εκπαιδευτική Αναγέννηση. Μαθητικό Συμβούλιο.</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Data Structures stored in LocalStorage for real-time usage (Empty by default)
+        let posts = JSON.parse(localStorage.getItem('ea_greek_posts')) || [];
+        let outsourceItems = JSON.parse(localStorage.getItem('ea_greek_outsource')) || [];
+        let projects = JSON.parse(localStorage.getItem('ea_greek_projects')) || [];
+
+        function saveStorage() {
+            localStorage.setItem('ea_greek_posts', JSON.stringify(posts));
+            localStorage.setItem('ea_greek_outsource', JSON.stringify(outsourceItems));
+            localStorage.setItem('ea_greek_projects', JSON.stringify(projects));
+        }
+
+        // Navigation Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Desktop Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'shadow-sm', 'text-sky-700');
+                btn.classList.add('text-slate-600');
+            });
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-600');
+                activeNav.classList.add('bg-white', 'shadow-sm', 'text-sky-700');
+            }
+
+            // Mobile Buttons
+            document.querySelectorAll('.mob-btn').forEach(btn => {
+                btn.classList.remove('text-sky-600');
+                btn.classList.add('text-slate-600');
+            });
+            const activeMob = document.getElementById('mob-' + tabId);
+            if (activeMob) {
+                activeMob.classList.remove('text-slate-600');
+                activeMob.classList.add('text-sky-600');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toast Feedback Alert
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Render Category 1: Δείτε Ιδέες & Δράσεις
+        function renderFeed() {
+            const container = document.getElementById('postsContainer');
+            const emptyState = document.getElementById('emptyFeed');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sortVal = document.getElementById('sortSelect').value;
+
+            container.innerHTML = '';
+
+            let filtered = posts.filter(p => 
+                p.fullName.toLowerCase().includes(query) ||
+                p.title.toLowerCase().includes(query) ||
+                p.description.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query)
+            );
+
+            if (sortVal === 'popular') {
+                filtered.sort((a, b) => b.likes - a.likes);
+            } else {
+                filtered.sort((a, b) => b.createdAt - a.createdAt);
+            }
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'beige-card beige-card-hover rounded-3xl p-6 flex flex-col justify-between transition-all';
+                
+                const formattedTime = new Date(post.createdAt).toLocaleDateString('el-GR', {
+                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-2xl bg-sky-100 border border-sky-200 text-sky-800 flex items-center justify-center font-bold text-xs uppercase">
+                                    ${escapeHtml(post.fullName.substring(0, 2))}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">${escapeHtml(post.fullName)}</h4>
+                                    <span class="text-[11px] font-medium text-slate-500">${formattedTime}</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200">${escapeHtml(post.category)}</span>
+                        </div>
+
+                        <h3 class="font-serif font-bold text-slate-900 text-base mt-2">${escapeHtml(post.title)}</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed my-2">${escapeHtml(post.description)}</p>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-beige-300/60">
+                        <div class="flex items-center gap-3">
+                            <button onclick="toggleLike('${post.id}')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${post.likedByMe ? 'bg-rose-50 text-rose-600 border border-rose-200' : 'bg-white text-slate-700 border border-beige-300 hover:bg-beige-50'}">
+                                <i class="${post.likedByMe ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart'}"></i>
+                                <span>${post.likes}</span>
+                            </button>
+                            <button onclick="toggleCommentSection('${post.id}')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-beige-300 hover:bg-beige-50 transition-all">
+                                <i class="fa-regular fa-comment text-sky-600"></i>
+                                <span>${post.comments.length} Σχόλια</span>
+                            </button>
+                        </div>
+
+                        <div id="comments-${post.id}" class="hidden mt-3 pt-3 border-t border-beige-200 space-y-3">
+                            <div class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                                ${post.comments.length === 0 ? '<p class="text-xs text-slate-400 italic">Δεν υπάρχουν σχόλια ακόμα.</p>' : ''}
+                                ${post.comments.map(c => `
+                                    <div class="bg-beige-50 p-2.5 rounded-xl border border-beige-200 text-xs">
+                                        <span class="font-bold text-sky-800">${escapeHtml(c.author)}</span>
+                                        <p class="text-slate-700 mt-0.5">${escapeHtml(c.text)}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <form onsubmit="handleAddComment(event, '${post.id}')" class="flex gap-2">
+                                <input type="text" id="comment-in-${post.id}" required placeholder="Γράψτε ένα σχόλιο..." class="flex-1 bg-white border border-beige-300 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-sky-500">
+                                <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold">Υποβολή</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Category 2 Form Submit Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const title = document.getElementById('activityTitle').value.trim();
+            const category = document.getElementById('ideaCategory').value;
+            const description = document.getElementById('ideaDescription').value.trim();
+
+            if (!firstName || !lastName || !title || !description) return;
+
+            const fullName = `${firstName} ${lastName}`;
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                fullName,
+                title,
+                category,
+                description,
+                createdAt: Date.now(),
+                likes: 0,
+                likedByMe: false,
+                comments: []
+            };
+
+            posts.unshift(newPost);
+            saveStorage();
+            document.getElementById('suggestForm').reset();
+            switchTab('feed');
+            renderFeed();
+            showToast('Η ιδέα σας δημοσιεύτηκε επιτυχώς στο φόρουμ!');
+        }
+
+        // Upvote/Like toggle
+        function toggleLike(id) {
+            const p = posts.find(item => item.id === id);
+            if (p) {
+                p.likedByMe = !p.likedByMe;
+                p.likes += p.likedByMe ? 1 : -1;
+                saveStorage();
+                renderFeed();
+            }
+        }
+
+        // Toggle Comments visibility
+        function toggleCommentSection(id) {
+            const el = document.getElementById('comments-' + id);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        // Add Comment Handler
+        function handleAddComment(e, id) {
+            e.preventDefault();
+            const input = document.getElementById('comment-in-' + id);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const author = prompt('Εισάγετε το όνομά σας για το σχόλιο:', 'Μαθητής') || 'Μαθητής';
+            const p = posts.find(item => item.id === id);
+            if (p) {
+                p.comments.push({ author, text });
+                saveStorage();
+                renderFeed();
+                document.getElementById('comments-' + id).classList.remove('hidden');
+                showToast('Το σχόλιο δημοσιεύθηκε!');
+            }
+        }
+
+        // Render Category 3: Εκτός Σχολείου Δράσεις
+        function renderOutsource() {
+            const container = document.getElementById('outsourceContainer');
+            const emptyState = document.getElementById('emptyOutsource');
+            container.innerHTML = '';
+
+            if (outsourceItems.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            outsourceItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'beige-card beige-card-hover rounded-3xl p-6 flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">${escapeHtml(item.tag)}</span>
+                        <h3 class="font-serif font-bold text-slate-900 text-lg mt-3">${escapeHtml(item.title)}</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">${escapeHtml(item.desc)}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-beige-200 flex justify-end">
+                        <button onclick="showToast('Εκδηλώσατε ενδιαφέρον για: ${escapeHtml(item.title)}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all">
+                            ${escapeHtml(item.btnText || 'Συμμετοχή στη Δράση')}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function handleOutsourceSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('outTitle').value.trim();
+            const tag = document.getElementById('outTag').value.trim();
+            const desc = document.getElementById('outDesc').value.trim();
+            const btnText = document.getElementById('outBtnText').value.trim();
+
+            if (!title || !desc) return;
+
+            outsourceItems.unshift({ title, tag, desc, btnText });
+            saveStorage();
+            toggleModal('outsourceModal');
+            renderOutsource();
+            showToast('Η εξωτερική δράση προστέθηκε με επιτυχία!');
+        }
+
+        // Render Category 4: Τα Έργα Μας
+        function renderProjects() {
+            const container = document.getElementById('projectsContainer');
+            const emptyState = document.getElementById('emptyProjects');
+            container.innerHTML = '';
+
+            if (projects.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            projects.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'beige-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-violet-50 text-violet-800 border border-violet-200">Ολοκληρωμένο Έργο</span>
+                            <span class="text-xs font-semibold text-slate-500">${escapeHtml(p.term)}</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-slate-900 text-xl">${escapeHtml(p.title)}</h3>
+                        <p class="text-slate-600 text-sm mt-3 leading-relaxed">${escapeHtml(p.desc)}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function handleProjectSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('projTitle').value.trim();
+            const term = document.getElementById('projTerm').value.trim();
+            const desc = document.getElementById('projDesc').value.trim();
+
+            if (!title || !desc) return;
+
+            projects.unshift({ title, term, desc });
+            saveStorage();
+            toggleModal('projectModal');
+            renderProjects();
+            showToast('Το ολοκληρωμένο έργο καταγράφηκε!');
+        }
+
+        // Modal Toggler
+        function toggleModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.toggle('hidden');
+        }
+
+        // Escape helper for safe text
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // App Initialization
+        window.onload = function() {
+            renderFeed();
+            renderOutsource();
+            renderProjects();
+        };
+    </script>
+</body>
+</html>
